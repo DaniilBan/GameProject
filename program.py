@@ -33,8 +33,6 @@ class Example(QWidget):
         qp.drawRect(30, 30, 120, 30)
         qp.setBrush(QColor(0, 255, 0))
         qp.drawRect(30, 60, 120, 30)
-        qp.setBrush(QColor(0, 0, 255))
-        qp.drawRect(30, 90, 120, 30)
 
 
 if __name__ == '__main__':
