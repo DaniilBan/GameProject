@@ -18,7 +18,7 @@ if __name__ == '__main__':
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 m = [randint(100, 400) for i in range(2)]
-                r, g, b = randint(0, 255), randint(0, 255), randint(0, 255)
+                r, g, b = randint(0, 255), randint(0, 254), randint(0, 255)
                 y = randint(10, 400)
                 pygame.draw.circle(screen, (r, g, b), m, y, 4)
 
