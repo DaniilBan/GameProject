@@ -1,13 +1,7 @@
-def my_superfunction():
-    print('What an awesome print!')
-
+#Даниил
 
 def main():
-    print('My first git program')
-    print('And I change it every day')
-    print('Again')
-    print('UFO came and added this lin')
-    my_superfunction()
+    print('Hello')
 
 
 if __name__ == '__main__':
