@@ -10,7 +10,7 @@ for i in range(n_people):
     ROS = int(input('Введите российский рейтинг игрока'))
     middle = (ROS + ELO) / 2
     Spisok[middle] = Players
-SpisokIgrokov = sorted(Spisok.items(),reverse = True)
+SpisokIgrokov = sorted(Spisok.items(), reverse=True)
 print(SpisokIgrokov)
 a = 'ч'
 d = len(SpisokIgrokov)
@@ -46,7 +46,11 @@ else:
     print(Turnumberone)
     print(SpisokIgrokov)
 
-
+dopspis = []
+for i in range(len(SpisokIgrokov)):
+    dopspis.append(list(SpisokIgrokov[i]))
+SpisokIgrokov = dopspis
+print(SpisokIgrokov)
 def result():
     a = 0
     c = 0
@@ -59,18 +63,22 @@ def result():
                 SpisokIgrokov[c].append(1)
                 SpisokIgrokov[b].append(0)
                 a += 1
+                c += 2
+                b += 2
             elif results == '0-1':
                 SpisokIgrokov[c].append(0)
                 SpisokIgrokov[b].append(1)
                 a += 1
+                c += 2
+                b += 2
             elif results == '0,5-0,5':
                 SpisokIgrokov[c].append(0.5)
                 SpisokIgrokov[b].append(0.5)
                 a += 1
+                c += 2
+                b += 2
             else:
                 print('Неверный ввод результата, повторите попытку!')
-            c += 2
-            b += 2
     else:
         while a != len(Turnumberone) - 1:
             results = str(input('Введите результат: 1-0,если выиграли белые,0-1,если чёрные и 0,5-0,5,если ничья'))
@@ -92,81 +100,147 @@ def result():
             b += 2
         SpisokIgrokov[-1].append(1)
 
-
 result()
-SpisokIgrokov = sorted(SpisokIgrokov, key=itemgetter(5), reverse=True)
+SpisokIgrokovSave = []
+def Result():
+    newSpis = []
+    if len(SpisokIgrokov) % 2 == 0:
+        for i in range(len(SpisokIgrokov) // 2):
+            results = str(input('Введите имя победителя. если ничья введите ничья'))
+            for j in range(1, len(SpisokIgrokov)):
+                if SpisokIgrokov[0][1] == SpisokIgrokov[j][-1]:
+                    if SpisokIgrokov[0][1] == results:
+                        SpisokIgrokov[0][5] += 1
+                        newSpis.append(SpisokIgrokov[0])
+                        newSpis.append(SpisokIgrokov[j])
+                        del SpisokIgrokov[j]
+                        del SpisokIgrokov[0]
+                        break
+                    elif SpisokIgrokov[j][1] == results:
+                        SpisokIgrokov[j][5] += 1
+                        newSpis.append(SpisokIgrokov[0])
+                        newSpis.append(SpisokIgrokov[j])
+                        del SpisokIgrokov[j]
+                        del SpisokIgrokov[0]
+                        break
+                    else:
+                        SpisokIgrokov[0][5] += 0.5
+                        SpisokIgrokov[j][5] += 0.5
+                        newSpis.append(SpisokIgrokov[0])
+                        newSpis.append(SpisokIgrokov[j])
+                        del SpisokIgrokov[j]
+                        del SpisokIgrokov[0]
+                        break
+    else:
+        for i in range(len(SpisokIgrokov)):
+            if SpisokIgrokov[i][-1] == 'bye':
+                SpisokIgrokov[i][5] += 1
+                newSpis.append(SpisokIgrokov[i])
+                del SpisokIgrokov[i]
+                break
+        for i in range(len(SpisokIgrokov) // 2):
+            results = str(input('Введите имя победителя. если ничья введите ничья'))
+            for j in range(1, len(SpisokIgrokov)):
+                if SpisokIgrokov[0][1] == SpisokIgrokov[j][-1]:
+                    if SpisokIgrokov[0][1] == results:
+                        SpisokIgrokov[0][5] += 1
+                        newSpis.append(SpisokIgrokov[0])
+                        newSpis.append(SpisokIgrokov[j])
+                        del SpisokIgrokov[j]
+                        del SpisokIgrokov[0]
+                        break
+                    elif SpisokIgrokov[j][1] == results:
+                        SpisokIgrokov[j][5] += 1
+                        newSpis.append(SpisokIgrokov[0])
+                        newSpis.append(SpisokIgrokov[j])
+                        del SpisokIgrokov[j]
+                        del SpisokIgrokov[0]
+                        break
+                    else:
+                        SpisokIgrokov[0][5] += 0.5
+                        SpisokIgrokov[j][5] += 0.5
+                        newSpis.append(SpisokIgrokov[0])
+                        newSpis.append(SpisokIgrokov[j])
+                        del SpisokIgrokov[j]
+                        del SpisokIgrokov[0]
+                        break
+    return newSpis
+
+
+def draw():
+    otvet = []
+    while len(SpisokIgrokov) % 2 != 0:
+        if x in SpisokIgrokov[-1]:
+            for i in range(-2, -len(SpisokIgrokov), -1):
+                if SpisokIgrokov[i][1] not in SpisokIgrokov[-1]:
+                    if SpisokIgrokov[i][3] >= SpisokIgrokov[-1][3] and SpisokIgrokov[i][2] < SpisokIgrokov[-1][2]:
+                        otvet.append(f"{SpisokIgrokov[i][1]}-{SpisokIgrokov[-1][1]}")
+                        SpisokIgrokov[-1][3] += 1
+                        SpisokIgrokov[-1].append(SpisokIgrokov[i][1])
+                        SpisokIgrokov[i].append(SpisokIgrokov[-1][1])
+                    elif SpisokIgrokov[-1][3] >= SpisokIgrokov[i][3] and SpisokIgrokov[-1][2] < SpisokIgrokov[i][2]:
+                        otvet.append(f"{SpisokIgrokov[-1][1]}-{SpisokIgrokov[i][1]}")
+                        SpisokIgrokov[i][3] += 1
+                        SpisokIgrokov[-1].append(SpisokIgrokov[i][1])
+                        SpisokIgrokov[i].append(SpisokIgrokov[-1][1])
+                    else:
+                        otvet.append(f"{SpisokIgrokov[-1][1]}-{SpisokIgrokov[i][1]}")
+                        SpisokIgrokov[-1][3] += 1
+                        SpisokIgrokov[-1].append(SpisokIgrokov[i][1])
+                        SpisokIgrokov[i].append(SpisokIgrokov[-1][1])
+                    SpisokIgrokovSave.append(SpisokIgrokov[i])
+                    SpisokIgrokovSave.append(SpisokIgrokov[-1])
+                    print(SpisokIgrokovSave)
+                    del SpisokIgrokov[i]
+                    del SpisokIgrokov[-1]
+                    break
+        else:
+            otvet.append(f"{SpisokIgrokov[-1][1]}-{x}")
+            SpisokIgrokov[-1].append(x)
+            SpisokIgrokovSave.append(SpisokIgrokov[-1])
+            del SpisokIgrokov[-1]
+
+    for w in range(len(SpisokIgrokov) // 2):
+        print(w)
+        for j in range(1, len(SpisokIgrokov)):
+            if SpisokIgrokov[j][1] not in SpisokIgrokov[0]:
+                if SpisokIgrokov[0][3] >= SpisokIgrokov[j][3] and SpisokIgrokov[0][2] < SpisokIgrokov[0][2]:
+                    print(f"{SpisokIgrokov[0][1]}-{SpisokIgrokov[j][1]}")
+                    SpisokIgrokov[j][3] += 1
+                    SpisokIgrokov[j].append(SpisokIgrokov[0][1])
+                    SpisokIgrokov[0].append(SpisokIgrokov[j][1])
+                elif SpisokIgrokov[j][3] >= SpisokIgrokov[0][3] and SpisokIgrokov[j][2] < SpisokIgrokov[0][2]:
+                    print(f"{SpisokIgrokov[j][1]}-{SpisokIgrokov[0][1]}")
+                    SpisokIgrokov[j][3] += 1
+                    SpisokIgrokov[j].append(SpisokIgrokov[0][1])
+                    SpisokIgrokov[0].append(SpisokIgrokov[j][1])
+                else:
+                    print(1234)
+                    print(f"{SpisokIgrokov[j][1]}-{SpisokIgrokov[0][1]}")
+                    SpisokIgrokov[j][3] += 1
+                    SpisokIgrokov[j].append(SpisokIgrokov[0][1])
+                    SpisokIgrokov[0].append(SpisokIgrokov[j][1])
+                SpisokIgrokovSave.append(SpisokIgrokov[j])
+                SpisokIgrokovSave.append(SpisokIgrokov[0])
+                print(SpisokIgrokovSave)
+                del SpisokIgrokov[j]
+                del SpisokIgrokov[0]
+                break
+    for k in otvet:
+        print(k)
+
+SpisokIgrokov.sort(key=lambda x:(-x[5], x[2]))
+
 f = 0
 g = f + 1
 h = len(SpisokIgrokov)
-if h % 2 == 0:
-    while f != h:
-        if SpisokIgrokov[f][1] == SpisokIgrokov[g][4]:
-            g += 1
-            if SpisokIgrokov[f][3] > SpisokIgrokov[g][3] or SpisokIgrokov[f][3] == SpisokIgrokov[g][3] and SpisokIgrokov[f][2] < SpisokIgrokov[g][2]:
-                print(SpisokIgrokov[f][1] + ' - ' + SpisokIgrokov[g][1])
-                SpisokIgrokov[f].append(SpisokIgrokov[g][1])
-                SpisokIgrokov[g].append(SpisokIgrokov[f][1])
-                f += 1
-                g += 1
-            else:
-                print(SpisokIgrokov[g][1] + ' - ' + SpisokIgrokov[f][1])
-                SpisokIgrokov[f].append(SpisokIgrokov[g][1])
-                SpisokIgrokov[g].append(SpisokIgrokov[f][1])
-                f += 1
-                g += 1
-        else:
-            if SpisokIgrokov[f][3] > SpisokIgrokov[g][3] or SpisokIgrokov[f][3] == SpisokIgrokov[g][3] and SpisokIgrokov[f][2] < SpisokIgrokov[g][2]:
-                print(SpisokIgrokov[f][1] + ' - ' + SpisokIgrokov[g][1])
-                SpisokIgrokov[f].append(SpisokIgrokov[g][1])
-                SpisokIgrokov[f].append(0)
-                SpisokIgrokov[g].append(SpisokIgrokov[f][1])
-                SpisokIgrokov[g].append(1)
-                f = g + 1
-                g += 2
-            else:
-                print(SpisokIgrokov[g][1] + ' - ' + SpisokIgrokov[f][1])
-                SpisokIgrokov[f].append(SpisokIgrokov[g][1])
-                SpisokIgrokov[g].append(SpisokIgrokov[f][1])
-                SpisokIgrokov[f].append(1)
-                SpisokIgrokov[g].append(0)
-                f = g + 1
-                g += 2
-else:
-    while f != h - 1:
-        if SpisokIgrokov[f][1] == SpisokIgrokov[g][4]:
-            g += 1
-            if SpisokIgrokov[f][3] > SpisokIgrokov[g][3] or SpisokIgrokov[f][3] == SpisokIgrokov[g][3] and SpisokIgrokov[f][2] < SpisokIgrokov[g][2]:
-                print(SpisokIgrokov[f][1] + ' - ' + SpisokIgrokov[g][1])
-                SpisokIgrokov[f].append(SpisokIgrokov[g][1])
-                SpisokIgrokov[g].append(SpisokIgrokov[f][1])
-                f += 1
-                g += 1
-            else:
-                print(SpisokIgrokov[g][1] + ' - ' + SpisokIgrokov[f][1])
-                SpisokIgrokov[f].append(SpisokIgrokov[g][1])
-                SpisokIgrokov[g].append(SpisokIgrokov[f][1])
-                f += 1
-                g += 1
-        else:
-            if SpisokIgrokov[f][3] > SpisokIgrokov[g][3] or SpisokIgrokov[f][3] == SpisokIgrokov[g][3] and SpisokIgrokov[f][2] < SpisokIgrokov[g][2]:
-                print(SpisokIgrokov[f][1] + ' - ' + SpisokIgrokov[g][1])
-                SpisokIgrokov[f].append(SpisokIgrokov[g][1])
-                SpisokIgrokov[f].append(0)
-                SpisokIgrokov[g].append(SpisokIgrokov[f][1])
-                SpisokIgrokov[g].append(1)
-                f = g + 1
-                g += 2
-            else:
-                print(SpisokIgrokov[g][1] + ' - ' + SpisokIgrokov[f][1])
-                SpisokIgrokov[f].append(SpisokIgrokov[g][1])
-                SpisokIgrokov[g].append(SpisokIgrokov[f][1])
-                SpisokIgrokov[f].append(1)
-                SpisokIgrokov[g].append(0)
-                f = g + 1
-                g += 2
-    print(SpisokIgrokov[-1][1] + ' - ' + 'bye')
-    SpisokIgrokov[-1].append('bye')
-    SpisokIgrokov[-1].append(0)
+draw()
+SpisokIgrokovSave.sort(key=lambda x:(-x[5], x[2]))
+SpisokIgrokov = SpisokIgrokovSave
+print(SpisokIgrokov)
+SpisokIgrokov = Result()
+SpisokIgrokov.sort(key=lambda x:(-x[5], x[2]))
+print(SpisokIgrokov)
 for i in range(len (SpisokIgrokov)):
     print(SpisokIgrokov[i])
 with open('SpisokIgrokov2', 'w') as file:
