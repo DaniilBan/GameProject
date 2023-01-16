@@ -173,19 +173,14 @@ def draw():
         if x in SpisokIgrokov[-1]:
             for i in range(-2, -len(SpisokIgrokov), -1):
                 if SpisokIgrokov[i][1] not in SpisokIgrokov[-1]:
-                    if SpisokIgrokov[i][3] >= SpisokIgrokov[-1][3] and SpisokIgrokov[i][2] < SpisokIgrokov[-1][2]:
+                    if (SpisokIgrokov[i][3] > SpisokIgrokov[-1][3]) or (SpisokIgrokov[i][2] < SpisokIgrokov[-1][2] and SpisokIgrokov[i][3] == SpisokIgrokov[-1][3]):
                         otvet.append(f"{SpisokIgrokov[i][1]}-{SpisokIgrokov[-1][1]}")
                         SpisokIgrokov[-1][3] += 1
                         SpisokIgrokov[-1].append(SpisokIgrokov[i][1])
                         SpisokIgrokov[i].append(SpisokIgrokov[-1][1])
-                    elif SpisokIgrokov[-1][3] >= SpisokIgrokov[i][3] and SpisokIgrokov[-1][2] < SpisokIgrokov[i][2]:
+                    elif (SpisokIgrokov[-1][3] > SpisokIgrokov[i][3]) or (SpisokIgrokov[-1][2] < SpisokIgrokov[i][2] and SpisokIgrokov[-1][3] == SpisokIgrokov[i][3]):
                         otvet.append(f"{SpisokIgrokov[-1][1]}-{SpisokIgrokov[i][1]}")
                         SpisokIgrokov[i][3] += 1
-                        SpisokIgrokov[-1].append(SpisokIgrokov[i][1])
-                        SpisokIgrokov[i].append(SpisokIgrokov[-1][1])
-                    else:
-                        otvet.append(f"{SpisokIgrokov[-1][1]}-{SpisokIgrokov[i][1]}")
-                        SpisokIgrokov[-1][3] += 1
                         SpisokIgrokov[-1].append(SpisokIgrokov[i][1])
                         SpisokIgrokov[i].append(SpisokIgrokov[-1][1])
                     SpisokIgrokovSave.append(SpisokIgrokov[i])
@@ -204,20 +199,14 @@ def draw():
         print(w)
         for j in range(1, len(SpisokIgrokov)):
             if SpisokIgrokov[j][1] not in SpisokIgrokov[0]:
-                if SpisokIgrokov[0][3] >= SpisokIgrokov[j][3] and SpisokIgrokov[0][2] < SpisokIgrokov[0][2]:
+                if (SpisokIgrokov[0][3] > SpisokIgrokov[j][3]) or (SpisokIgrokov[0][2] < SpisokIgrokov[j][2] and SpisokIgrokov[0][3] == SpisokIgrokov[j][3]):
                     print(f"{SpisokIgrokov[0][1]}-{SpisokIgrokov[j][1]}")
                     SpisokIgrokov[j][3] += 1
                     SpisokIgrokov[j].append(SpisokIgrokov[0][1])
                     SpisokIgrokov[0].append(SpisokIgrokov[j][1])
-                elif SpisokIgrokov[j][3] >= SpisokIgrokov[0][3] and SpisokIgrokov[j][2] < SpisokIgrokov[0][2]:
+                elif (SpisokIgrokov[j][3] > SpisokIgrokov[0][3]) or (SpisokIgrokov[j][2] < SpisokIgrokov[0][2] and SpisokIgrokov[j][3] == SpisokIgrokov[0][3]):
                     print(f"{SpisokIgrokov[j][1]}-{SpisokIgrokov[0][1]}")
-                    SpisokIgrokov[j][3] += 1
-                    SpisokIgrokov[j].append(SpisokIgrokov[0][1])
-                    SpisokIgrokov[0].append(SpisokIgrokov[j][1])
-                else:
-                    print(1234)
-                    print(f"{SpisokIgrokov[j][1]}-{SpisokIgrokov[0][1]}")
-                    SpisokIgrokov[j][3] += 1
+                    SpisokIgrokov[0][3] += 1
                     SpisokIgrokov[j].append(SpisokIgrokov[0][1])
                     SpisokIgrokov[0].append(SpisokIgrokov[j][1])
                 SpisokIgrokovSave.append(SpisokIgrokov[j])
