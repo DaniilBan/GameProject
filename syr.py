@@ -24,32 +24,53 @@ def selection_of_scale(json):
 # Пусть наше приложение предполагает запуск:
 # python search.py Москва, ул. Ак. Королева, 12
 # Тогда запрос к геокодеру формируется следующим образом:
-toponym_to_find = " ".join(sys.argv[1:])
+
+
+
+search_api_server = "https://search-maps.yandex.ru/v1/"
+api_key = "dda3ddba-c9ea-4ead-9010-f43fbc15c6e3"
+
+address_ll = "39.233785,51.634796"
+
+search_params = {
+    "apikey": api_key,
+    "text": "подготовка к огэ",
+    "lang": "ru_RU",
+    "ll": address_ll,
+    "type": "biz"
+}
+
+response = requests.get(search_api_server, params=search_params)
+if not response:
+    pass
+
+# Преобразуем ответ в json-объект
+json_response = response.json()
+
+# Получаем первую найденную организацию.
+organization = json_response["features"][0]
+# Название организации.
+org_name = organization["properties"]["CompanyMetaData"]["name"]
+# Адрес организации.
+org_address = organization["properties"]["CompanyMetaData"]["address"]
+
 
 geocoder_api_server = "http://geocode-maps.yandex.ru/1.x/"
 
 geocoder_params = {
     "apikey": "40d1649f-0493-4b70-98ba-98533de7710b",
-    "geocode": toponym_to_find,
+    "geocode": org_address,
     "format": "json"}
 
 response = requests.get(geocoder_api_server, params=geocoder_params)
 
-if not response:
-    # обработка ошибочной ситуации
-    pass
-
-# Преобразуем ответ в json-объект
 json_response = response.json()
-# Получаем первый топоним из ответа геокодера.
-toponym = json_response["response"]["GeoObjectCollection"][
-    "featureMember"][0]["GeoObject"]
-# Координаты центра топонима:
-toponym_coodrinates = toponym["Point"]["pos"]
-# Долгота и широта:
-toponym_longitude, toponym_lattitude = toponym_coodrinates.split(" ")
 
-delta = input()
+# Получаем координаты ответа.
+point = organization["geometry"]["coordinates"]
+print(point)
+org_point = "{0},{1}".format(point[0], point[1])
+delta = "0.005"
 
 map_params = selection_of_scale(json_response)
 
